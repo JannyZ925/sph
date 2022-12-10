@@ -23,6 +23,7 @@ export default ({
     getters: {
         // 商品
         goodsList(state){
+            console.log(state.searchResult)
             // 如果网不好，state.searchResult.goodsList返回的是undefined，应该保证它至少是一个数组，所以后面要加 ||[]
             return state.searchResult.goodsList || []
         },

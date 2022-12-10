@@ -11,15 +11,13 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" v-if="searchParams.categoryName">{{searchParams.categoryName}}<i @click="removeCategoryName">×</i></li>
+            <li class="with-x" v-if="searchParams.keyword">{{searchParams.keyword}}<i @click="removeKeyword">×</i></li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector/>
+        <SearchSelector @getTradeMarkInfo="getTradeMarkInfo"/>
 
         <!--details-->
         <div class="details clearfix">
@@ -168,6 +166,26 @@ export default {
       this.searchParams.category3id = ""
       // 整理参数，如果后面的对象中参数名和第一个相同，后面的会覆盖前面
       Object.assign(this.searchParams, this.$route.query, this.$route.params)
+      // 发请求
+      this.$store.dispatch('getSearchResult', this.searchParams)
+    },
+
+    // 移除面包屑中分类名称的事件
+    removeCategoryName() {
+      this.searchParams.categoryName = ''
+      this.$router.push({name: 'search', params: this.$route.params})
+    },
+    // 移除面包屑中关键字的事件
+    removeKeyword() {
+      this.searchParams.keyword = ''
+      this.$router.push({name: 'search', query: this.$route.query})
+      // 由于关键字存储在Header组件中，所以这里要用全局事件总线进行通信
+      this.$bus.$emit('clearKeyword')
+    },
+
+    // 点击品牌名称的事件
+    getTradeMarkInfo(tradeMark) {
+      this.searchParams.trademark = `${tradeMark.tmId}:${tradeMark.tmName}`
       // 发请求
       this.$store.dispatch('getSearchResult', this.searchParams)
     }

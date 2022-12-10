@@ -4,7 +4,7 @@
       <div class="fl key brand">品牌</div>
       <div class="value logos">
         <ul class="logo-list">
-          <li v-for="(trademark, index) in trademarkList" :key="trademark.tmId">{{ trademark.tmName }}</li>
+          <li v-for="(trademark, index) in trademarkList" :key="trademark.tmId" @click="getTradeMarkInfo(trademark)">{{ trademark.tmName }}</li>
         </ul>
       </div>
       <div class="ext">
@@ -34,6 +34,12 @@
 
     computed: {
       ...mapGetters(['trademarkList', 'attrsList'])
+    },
+
+    methods: {
+      getTradeMarkInfo(tradeMark) {
+        this.$emit('getTradeMarkInfo', tradeMark)
+      }
     }
   }
 </script>
